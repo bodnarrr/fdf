@@ -20,25 +20,15 @@ static t_fdf 	*ft_parse_error(void)
 static t_fpts	**ft_all_points(t_flst *lst, t_fdf *fdf)
 {
 	int			i;
+	int			j;
 	t_flst		*wrk;
 	t_fpts 		**res;
 
 	res = (t_fpts**)malloc(sizeof(t_fpts*) * fdf->rows);
-	i = 0;
+	i = -1;
 	wrk = lst;
 	while (++i < fdf->rows)
 	{
-		
-
-		ft_printf("lpts = %p\n", wrk->l_pts);
-		//res[i] wasn't allocated!
-		//add malloc for every line in [][]array!
-
-
-
-
-
-
 		res[i] = wrk->l_pts;
 		wrk = wrk->next;
 	}
@@ -70,10 +60,11 @@ static t_fpts	*ft_make_arr(char **wrk, t_fparse p)
 	t_fpts		*res;
 	int			i;
 
-	res = (t_fpts*)malloc(sizeof(t_fpts) * (p.dotpl));
+	res = (t_fpts*)ft_memalloc(sizeof(t_fpts) * (p.dotpl));
 	i = -1;
 	while (++i < p.dotpl)
 		(res[i]).z = ft_atoi(wrk[i]);
+	i = -1;
 	return (res);
 }
 

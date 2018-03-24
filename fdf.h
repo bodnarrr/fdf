@@ -15,6 +15,11 @@
 # include "libftprintf/libftprintf.h"
 # include "minilibx_macos/mlx.h"
 
+# define WIN_W 600
+# define WIN_H 300
+
+
+
 typedef struct		s_fpts
 {
 	int				x;
