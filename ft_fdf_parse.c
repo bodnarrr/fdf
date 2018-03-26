@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-static t_fdf 	*ft_parse_error(void)
+static t_fdf	*ft_parse_error(void)
 {
 	return (NULL);
 }
@@ -20,9 +20,8 @@ static t_fdf 	*ft_parse_error(void)
 static t_fpts	**ft_all_points(t_flst *lst, t_fdf *fdf)
 {
 	int			i;
-	int			j;
 	t_flst		*wrk;
-	t_fpts 		**res;
+	t_fpts		**res;
 
 	res = (t_fpts**)malloc(sizeof(t_fpts*) * fdf->rows);
 	i = -1;
@@ -90,6 +89,8 @@ t_fdf			*ft_fparse(int fd, t_fdf *fdf)
 	t_fpts		*l_pts;
 	t_flst		*lst;
 
+	if (fd == -1)
+		return (NULL);
 	fdf = (t_fdf*)malloc(sizeof(t_fdf));
 	ft_bzero(&p, sizeof(t_fparse));
 	fdf->rows = 0;
@@ -106,6 +107,7 @@ t_fdf			*ft_fparse(int fd, t_fdf *fdf)
 		if (p.curr_dotpl != p.dotpl)
 			return (ft_parse_error());
 		l_pts = ft_make_arr(wrk, p);
+		ft_clear_lines(wrk, p.curr_dotpl);
 		lst = ft_add_fnode(l_pts, lst);
 		(fdf->rows)++;
 	}

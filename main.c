@@ -12,6 +12,16 @@
 
 #include "fdf.h"
 
+t_fdf	*ft_initialize_fdf(t_fdf *fdf)
+{
+	fdf->sh_hor = 0.0;
+	fdf->sh_vert = 0.0;
+	fdf->cor = 45.0;
+	fdf->mlx = mlx_init();
+	fdf->win = mlx_new_window(fdf->mlx, WIN_W, WIN_H, "FDF");
+	return (fdf);
+}
+
 int		ft_fdf_usage(void)
 {
 	ft_printf("usage: ./fdf source_file\n");
@@ -21,22 +31,16 @@ int		ft_fdf_usage(void)
 int		main(int ac, char **av)
 {
 	t_fdf	*fdf;
-	int		fd;
-	void	*mlx_ptr;
-	void	*win_ptr;
 
 	if (ac != 2)
 		return (ft_fdf_usage());
+	fdf = NULL;
 	if ((fdf = ft_fparse(open(av[1], O_RDONLY), fdf)) == NULL)
 		return (1);
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, WIN_W, WIN_H, "FDF Mother fucker!");
-	// ft_m
-	mlx_pixel_put(mlx_ptr, win_ptr, WIN_W / 2, WIN_H / 2, 0xFF00);
-	mlx_string_put(mlx_ptr, win_ptr, WIN_W / 2,
-							WIN_H / 2, 0xFF00, "It's my FDF, motherfuckers!");
-	mlx_loop(mlx_ptr);
+	ft_initial_coords(fdf->points, fdf->rows, fdf->cols);
+	fdf = ft_initialize_fdf(fdf);
+	ft_print_points(fdf);
+	mlx_hook(fdf->win, 2, 5, ft_fdf_hooks, fdf);
+	mlx_loop(fdf->mlx);
 	return (0);
 }
-
-
