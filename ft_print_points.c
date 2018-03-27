@@ -93,16 +93,17 @@ void		ft_print_points(t_fdf *fdf)
 
 	i = -1;
 	ft_project_points(fdf);
+	fdf->
 	while (++i < fdf->rows)
 	{
 		j = -1;
 		while (++j < fdf->cols)
 		{
 			if (j + 1 < fdf->cols)
-				plot_line((fdf->points)[i][j].xn + fdf->sh_hor, (fdf->points)[i][j].yn + fdf->sh_vert,
+				plot_line(PT.xn + fdf->sh_hor, PT.yn + fdf->sh_vert,
 					(fdf->points)[i][j + 1].xn + fdf->sh_hor, (fdf->points)[i][j + 1].yn + fdf->sh_vert, fdf, (fdf->points)[i][j].clr);
 			if (i + 1 < fdf->rows)
-				plot_line((fdf->points)[i][j].xn + fdf->sh_hor, (fdf->points)[i][j].yn + fdf->sh_vert,
+				plot_line(PT.xn + fdf->sh_hor, PT.yn + fdf->sh_vert,
 					(fdf->points)[i + 1][j].xn + fdf->sh_hor, (fdf->points)[i + 1][j].yn + fdf->sh_vert, fdf, (fdf->points)[i][j].clr);
 		}
 	}
