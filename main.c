@@ -14,9 +14,13 @@
 
 t_fdf	*ft_initialize_fdf(t_fdf *fdf)
 {
-	fdf->sh_hor = 0.0;
-	fdf->sh_vert = 0.0;
-	fdf->cor = 45.0;
+	fdf->dx = 0.0;
+	fdf->dy = 0.0;
+	fdf->ax = 0;
+	fdf->ay = 0;
+	fdf->az = 0;
+	fdf->cx = 0.0;
+	fdf->cy = 0.0;
 	fdf->mlx = mlx_init();
 	fdf->win = mlx_new_window(fdf->mlx, WIN_W, WIN_H, "FDF");
 	return (fdf);

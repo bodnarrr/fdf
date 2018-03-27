@@ -19,13 +19,19 @@
 
 # define WIN_W 1920
 # define WIN_H 1080
-# define IND 96
+# define IND 200
 # define PT (fdf->points)[i][j]
 # define UP 0
 # define DOWN 1
 # define LEFT 2
 # define RIGHT 3
 # define DEG (M_PI / 180)
+# define ZU 0
+# define ZD 1
+# define XU 2
+# define XD 3
+# define YU 4
+# define YD 5
 
 typedef struct		s_fpts
 {
@@ -43,11 +49,15 @@ typedef struct		s_fdf
 	t_fpts			**points;
 	int				rows;
 	int				cols;
-	float			sh_hor;
-	float			sh_vert;
+	float			dx;
+	float			dy;
+	int				ax;
+	int				ay;
+	int				az;
+	float			cx;
+	float			cy;
 	void			*mlx;
 	void			*win;
-	double			cor;
 }					t_fdf;
 
 typedef struct		s_flst
