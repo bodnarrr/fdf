@@ -70,7 +70,7 @@ void plot_line (int x0, int y0, int x1, int y1, t_fdf *fdf)
   int err = dx + dy, e2; /* error value e_xy */
  
   for (;;){  /* loop */
-    mlx_pixel_put(fdf->mlx, fdf->win, x0, y0, 0xFF);
+    mlx_pixel_put(fdf->mlx, fdf->win, x0, y0, 0xFF00);
     if (x0 == x1 && y0 == y1) break;
     e2 = 2 * err;
     if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */

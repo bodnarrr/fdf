@@ -30,17 +30,18 @@ int		ft_fdf_usage(void)
 int		main(int ac, char **av)
 {
 	t_fdf	*fdf;
+	int		fd;
 
 	if (ac != 2)
 		return (ft_fdf_usage());
 	fdf = NULL;
-	if ((fdf = ft_fparse(open(av[1], O_RDONLY), fdf)) == NULL)
+	fd = open(av[1], O_RDONLY);
+	if ((fdf = ft_fparse(fd, fdf, 0, NULL)) == NULL)
 		return (1);
 	ft_initial_coords(fdf->points, fdf->rows, fdf->cols);
 	fdf = ft_initialize_fdf(fdf);
 	ft_print_points(fdf);
 	mlx_hook(fdf->win, 2, 5, ft_fdf_hooks, fdf);
 	mlx_loop(fdf->mlx);
-	system("leaks fdf");
 	return (0);
 }

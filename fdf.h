@@ -68,7 +68,7 @@ typedef struct		s_fparse
 	int				curr_dotpl;
 }					t_fparse;
 
-t_fdf				*ft_fparse(int fd, t_fdf *fdf);
+t_fdf				*ft_fparse(int fd, t_fdf *fdf, int gnl, t_flst *lst);
 void				ft_initial_coords(t_fpts **points, int rows, int cols);
 void				ft_print_points(t_fdf *fdf);
 int					ft_fdf_hooks(int key, t_fdf *fdf);

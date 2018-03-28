@@ -12,10 +12,10 @@
 
 #include "fdf.h"
 
-static t_fdf	*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst)
+static t_fdf	*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst, int fd)
 {
 	t_flst		*fordel;
-	
+
 	while (*lst)
 	{
 		fordel = *lst;
@@ -26,12 +26,12 @@ static t_fdf	*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst)
 	}
 	free(fdf);
 	ft_strdel(line);
+	close(fd);
 	ft_printf("Incorrect map!\n");
-	system("leaks fdf");
 	return (NULL);
 }
 
-static t_fpts	**ft_all_points(t_flst *lst, t_fdf *fdf)
+static t_fdf	*ft_all_points(t_flst *lst, t_fdf *fdf)
 {
 	int			i;
 	t_flst		*wrk;
@@ -45,7 +45,8 @@ static t_fpts	**ft_all_points(t_flst *lst, t_fdf *fdf)
 		res[i] = wrk->l_pts;
 		wrk = wrk->next;
 	}
-	return (res);
+	fdf->points = res;
+	return (fdf);
 }
 
 static t_flst	*ft_add_fnode(t_fpts *pts, t_flst *lst)
@@ -96,7 +97,7 @@ static int		ft_count_dotpl(char **get)
 	return (res);
 }
 
-t_fdf			*ft_empty_first_line(t_fdf *fdf, char **wrk)
+t_fdf			*ft_empty_first_line(t_fdf *fdf, char **wrk, int fd)
 {
 	free(wrk[0]);
 	wrk[0] = NULL;
@@ -104,50 +105,60 @@ t_fdf			*ft_empty_first_line(t_fdf *fdf, char **wrk)
 	wrk = NULL;
 	free(fdf);
 	fdf = NULL;
+	close(fd);
 	ft_printf("Empty map!\n");
 	return (fdf);
 }
 
-t_fdf			*ft_fparse(int fd, t_fdf *fdf)
+t_fdf			*ft_folder_err(t_fdf **fdf)
 {
-	int			gnl;
+	free(*fdf);
+	*fdf = NULL;
+	return (*fdf);
+}
+
+char			**ft_get_clearsplit(char **str)
+{
+	char		**res;
+
+	res = ft_strsplit(*str, ' ');
+	ft_strdel(str);
+	return (res);
+}
+
+t_fdf			*ft_fparse(int fd, t_fdf *fdf, int gnl, t_flst *lst)
+{
 	t_fparse	p;
 	char		**wrk;
 	t_fpts		*l_pts;
-	t_flst		*lst;
 
-	if (fd == -1)
+	if (fd == -1 && ft_printf("Incorrect filename!\n"))
 		return (NULL);
 	fdf = (t_fdf*)ft_memalloc(sizeof(t_fdf));
-	fdf->rows = 0;
-	lst = NULL;
-	gnl = 0;
 	while ((gnl = get_next_line(fd, &(p.line))) == 1)
 	{
-		wrk = ft_strsplit(p.line, ' ');
-		ft_strdel(&(p.line));
+		wrk = ft_get_clearsplit(&(p.line));
 		if (fdf->rows == 0)
 		{
 			if ((p.dotpl = ft_count_dotpl(wrk)) == 0)
-				return (ft_empty_first_line(fdf, wrk));
+				return (ft_empty_first_line(fdf, wrk, fd));
 			fdf->cols = p.dotpl;
 		}
-		p.curr_dotpl = ft_count_dotpl(wrk);
-		if (p.curr_dotpl != p.dotpl)
-			return (ft_parse_error(fdf, &(p.line), &lst));
+		if ((p.curr_dotpl = ft_count_dotpl(wrk)) != p.dotpl)
+			return (ft_parse_error(fdf, &(p.line), &lst, fd));
+
+		// lst = ft_make_lst(wrk, p, lst);
+
 		l_pts = ft_make_arr(wrk, p);
 		ft_clear_strarr(wrk, p.curr_dotpl);
 		lst = ft_add_fnode(l_pts, lst);
 		(fdf->rows)++;
+
+
 	}
-	if (gnl == -1)
-	{
-		ft_printf("It's a folder!\n");
-		return (NULL);
-	}
+	if (gnl == -1 && ft_printf("It's a folder!\n"))
+		return (ft_folder_err(&fdf));
 	if (p.line != NULL)
 		ft_strdel(&(p.line));
-	close(fd);
-	fdf->points = ft_all_points(lst, fdf);
-	return (fdf);
+	return (ft_all_points(lst, fdf));
 }
