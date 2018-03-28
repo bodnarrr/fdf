@@ -31,10 +31,7 @@ void	ft_initial_coords(t_fpts **points, int rows, int cols)
 		{
 			points[i][j].x = IND + j * hor;
 			points[i][j].y = IND + i * vert;
-			if (points[i][j].z == 0)
-				points[i][j].clr = 0xFF00;
-			else if (points[i][j].z > 0)
-				points[i][j].clr = 0xFF0000;
+			points[i][j].clr = 0xFF00;
 		}
 	}
 }

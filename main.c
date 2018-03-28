@@ -14,13 +14,8 @@
 
 t_fdf	*ft_initialize_fdf(t_fdf *fdf)
 {
-	fdf->dx = 0.0;
-	fdf->dy = 0.0;
-	fdf->ax = 0;
-	fdf->ay = 0;
-	fdf->az = 0;
-	fdf->cx = 0.0;
-	fdf->cy = 0.0;
+	fdf->dx = WIN_W / 5;
+	fdf->dy = WIN_H / 8;
 	fdf->mlx = mlx_init();
 	fdf->win = mlx_new_window(fdf->mlx, WIN_W, WIN_H, "FDF");
 	return (fdf);
@@ -46,5 +41,6 @@ int		main(int ac, char **av)
 	ft_print_points(fdf);
 	mlx_hook(fdf->win, 2, 5, ft_fdf_hooks, fdf);
 	mlx_loop(fdf->mlx);
+	system("leaks fdf");
 	return (0);
 }

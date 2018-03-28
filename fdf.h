@@ -51,11 +51,6 @@ typedef struct		s_fdf
 	int				cols;
 	float			dx;
 	float			dy;
-	int				ax;
-	int				ay;
-	int				az;
-	float			cx;
-	float			cy;
 	void			*mlx;
 	void			*win;
 }					t_fdf;
@@ -77,6 +72,6 @@ t_fdf				*ft_fparse(int fd, t_fdf *fdf);
 void				ft_initial_coords(t_fpts **points, int rows, int cols);
 void				ft_print_points(t_fdf *fdf);
 int					ft_fdf_hooks(int key, t_fdf *fdf);
-void				ft_clear_lines(char **str, int lines);
+void				ft_clear_strarr(char **str, int lines);
 
 #endif

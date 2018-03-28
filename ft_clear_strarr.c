@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_clear_lines.c                                   :+:      :+:    :+:   */
+/*   ft_clear_atrarr.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abodnar <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void		ft_clear_lines(char **str, int lines)
+void		ft_clear_strarr(char **str, int lines)
 {
 	int		i;
 

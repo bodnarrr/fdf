@@ -15,14 +15,14 @@ NAME = fdf
 LIB = libftprintf.a
 
 SRCS =	main.c ft_fdf_parse.c ft_initial_coords.c ft_print_points.c \
-		ft_fdf_hooks.c ft_clear_lines.c
+		ft_fdf_hooks.c ft_clear_strarr.c
 		
 
 OBJECTS = $(SRCS:.c=.o)
 
 FLAGS = -Wall -Wextra -Werror
 
-HEADERS = *.h
+HEADERS = fdf.h
 
 all: $(NAME)
 

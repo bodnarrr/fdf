@@ -63,14 +63,14 @@ static void	ft_fdf_rot_x(t_fdf *fdf, float angle)
 	}
 }
 
-void plot_line (int x0, int y0, int x1, int y1, t_fdf *fdf, uint color)
+void plot_line (int x0, int y0, int x1, int y1, t_fdf *fdf)
 {
   int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
   int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
   int err = dx + dy, e2; /* error value e_xy */
  
   for (;;){  /* loop */
-    mlx_pixel_put(fdf->mlx, fdf->win, x0, y0, color);
+    mlx_pixel_put(fdf->mlx, fdf->win, x0, y0, 0xFF);
     if (x0 == x1 && y0 == y1) break;
     e2 = 2 * err;
     if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
@@ -80,9 +80,9 @@ void plot_line (int x0, int y0, int x1, int y1, t_fdf *fdf, uint color)
 
 static void	ft_project_points(t_fdf *fdf)
 {
-	ft_fdf_rot_x(fdf, (-40 + fdf->ax) * DEG);
-	ft_fdf_rot_y(fdf, (-40 + fdf->ay) * DEG);
-	ft_fdf_rot_z(fdf, (5 + fdf->az) * DEG);
+	ft_fdf_rot_x(fdf, -40 * DEG);
+	ft_fdf_rot_y(fdf, -40 * DEG);
+	ft_fdf_rot_z(fdf, 5 * DEG);
 }
 
 void		ft_print_points(t_fdf *fdf)
@@ -91,12 +91,7 @@ void		ft_print_points(t_fdf *fdf)
 	int	j;
 
 	i = -1;
-
-	fdf->cx = ((fdf->points)[0][0].xn + (fdf->points)[0][fdf->cols - 1].xn) / 2;
-	fdf->cy = ((fdf->points)[0][0].yn + (fdf->points)[fdf->rows - 1][0].yn) / 2;
-	
 	ft_project_points(fdf);
-	
 	while (++i < fdf->rows)
 	{
 		j = -1;
@@ -106,14 +101,12 @@ void		ft_print_points(t_fdf *fdf)
 				plot_line(	PT.xn + fdf->dx,
 							PT.yn + fdf->dy,
 							(fdf->points)[i][j + 1].xn + fdf->dx,
-							(fdf->points)[i][j + 1].yn + fdf->dy,
-							fdf, (fdf->points)[i][j].clr);
+							(fdf->points)[i][j + 1].yn + fdf->dy, fdf);
 			if (i + 1 < fdf->rows)
 				plot_line(	PT.xn + fdf->dx,
 							PT.yn + fdf->dy,
 							(fdf->points)[i + 1][j].xn + fdf->dx,
-							(fdf->points)[i + 1][j].yn + fdf->dy,
-							fdf, (fdf->points)[i][j].clr);
+							(fdf->points)[i + 1][j].yn + fdf->dy, fdf);
 		}
 	}
 }

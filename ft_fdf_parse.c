@@ -12,8 +12,22 @@
 
 #include "fdf.h"
 
-static t_fdf	*ft_parse_error(void)
+static t_fdf	*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst)
 {
+	t_flst		*fordel;
+	
+	while (*lst)
+	{
+		fordel = *lst;
+		free((*lst)->l_pts);
+		*lst = (*lst)->next;
+		free(fordel);
+		fordel = NULL;
+	}
+	free(fdf);
+	ft_strdel(line);
+	ft_printf("Incorrect map!\n");
+	system("leaks fdf");
 	return (NULL);
 }
 
@@ -82,8 +96,21 @@ static int		ft_count_dotpl(char **get)
 	return (res);
 }
 
+t_fdf			*ft_empty_first_line(t_fdf *fdf, char **wrk)
+{
+	free(wrk[0]);
+	wrk[0] = NULL;
+	free(wrk);
+	wrk = NULL;
+	free(fdf);
+	fdf = NULL;
+	ft_printf("Empty map!\n");
+	return (fdf);
+}
+
 t_fdf			*ft_fparse(int fd, t_fdf *fdf)
 {
+	int			gnl;
 	t_fparse	p;
 	char		**wrk;
 	t_fpts		*l_pts;
@@ -91,25 +118,32 @@ t_fdf			*ft_fparse(int fd, t_fdf *fdf)
 
 	if (fd == -1)
 		return (NULL);
-	fdf = (t_fdf*)malloc(sizeof(t_fdf));
-	ft_bzero(&p, sizeof(t_fparse));
+	fdf = (t_fdf*)ft_memalloc(sizeof(t_fdf));
 	fdf->rows = 0;
 	lst = NULL;
-	while (get_next_line(fd, &(p.line)))
+	gnl = 0;
+	while ((gnl = get_next_line(fd, &(p.line))) == 1)
 	{
 		wrk = ft_strsplit(p.line, ' ');
+		ft_strdel(&(p.line));
 		if (fdf->rows == 0)
 		{
-			p.dotpl = ft_count_dotpl(wrk);
+			if ((p.dotpl = ft_count_dotpl(wrk)) == 0)
+				return (ft_empty_first_line(fdf, wrk));
 			fdf->cols = p.dotpl;
 		}
 		p.curr_dotpl = ft_count_dotpl(wrk);
 		if (p.curr_dotpl != p.dotpl)
-			return (ft_parse_error());
+			return (ft_parse_error(fdf, &(p.line), &lst));
 		l_pts = ft_make_arr(wrk, p);
-		ft_clear_lines(wrk, p.curr_dotpl);
+		ft_clear_strarr(wrk, p.curr_dotpl);
 		lst = ft_add_fnode(l_pts, lst);
 		(fdf->rows)++;
+	}
+	if (gnl == -1)
+	{
+		ft_printf("It's a folder!\n");
+		return (NULL);
 	}
 	if (p.line != NULL)
 		ft_strdel(&(p.line));
