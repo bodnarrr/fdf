@@ -63,20 +63,22 @@ static void	ft_fdf_rot_x(t_fdf *fdf, float angle)
 	}
 }
 
-void plot_line (int x0, int y0, int x1, int y1, t_fdf *fdf)
+
+void	ft_bresenham (int x0, int y0, int x1, int y1, t_fdf *fdf)
 {
   int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
   int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
   int err = dx + dy, e2; /* error value e_xy */
  
   for (;;){  /* loop */
-    mlx_pixel_put(fdf->mlx, fdf->win, x0, y0, 0xFF00);
+  	mlx_pixel_put(fdf->mlx, fdf->win, x0, y0, 0xFF00);
     if (x0 == x1 && y0 == y1) break;
     e2 = 2 * err;
     if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
     if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
   }
 }
+
 
 static void	ft_project_points(t_fdf *fdf)
 {
@@ -92,21 +94,20 @@ void		ft_print_points(t_fdf *fdf)
 
 	i = -1;
 	ft_project_points(fdf);
+	if (fdf->rows == 1 && fdf->cols == 1)
+		mlx_pixel_put(fdf->mlx, fdf->win, (fdf->points)[0][0].x + fdf->dx
+			- WIN_W / 5, (fdf->points)[0][0].y + fdf->dy - WIN_H / 8, 0xFF00);
 	while (++i < fdf->rows)
 	{
 		j = -1;
 		while (++j < fdf->cols)
 		{
 			if (j + 1 < fdf->cols)
-				plot_line(	PT.xn + fdf->dx,
-							PT.yn + fdf->dy,
-							(fdf->points)[i][j + 1].xn + fdf->dx,
-							(fdf->points)[i][j + 1].yn + fdf->dy, fdf);
+				ft_bresenham((fdf->points)[i][j].xn + fdf->dx, (fdf->points)[i][j].yn + fdf->dy,
+				(fdf->points)[i][j + 1].xn + fdf->dx, (fdf->points)[i][j + 1].yn + fdf->dy, fdf);
 			if (i + 1 < fdf->rows)
-				plot_line(	PT.xn + fdf->dx,
-							PT.yn + fdf->dy,
-							(fdf->points)[i + 1][j].xn + fdf->dx,
-							(fdf->points)[i + 1][j].yn + fdf->dy, fdf);
+				ft_bresenham((fdf->points)[i][j].xn + fdf->dx, (fdf->points)[i][j].yn + fdf->dy,
+				(fdf->points)[i + 1][j].xn + fdf->dx, (fdf->points)[i + 1][j].yn + fdf->dy, fdf);
 		}
 	}
 }

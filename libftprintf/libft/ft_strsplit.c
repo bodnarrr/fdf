@@ -27,10 +27,10 @@ static char	*ft_save_words(char const *str, char delim)
 		return (NULL);
 	i = 0;
 	while (str[i] && str[i] != delim)
-    {
-        word[i] = str[i];
-        i++;
-    }
+	{
+		word[i] = str[i];
+		i++;
+	}
 	word[i] = '\0';
 	return (word);
 }

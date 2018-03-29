@@ -12,15 +12,19 @@
 
 #include "fdf.h"
 
-void	ft_initial_coords(t_fpts **points, int rows, int cols)
+void	ft_initial_coords(t_fpts **points, int rows, int cols, t_fdf *fdf)
 {
 	int		i;
 	int		j;
 	int		hor;
 	int		vert;
 
-	if (!points)
+	if (fdf->cols == 1 && fdf->rows == 1)
+	{
+		points[0][0].x = WIN_W / 2;
+		points[0][0].y = WIN_H / 2;
 		return ;
+	}
 	i = -1;
 	hor = (WIN_W - 2 * IND) / (cols - 1);
 	vert = (WIN_H - 2 * IND) / (rows - 1);

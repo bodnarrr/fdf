@@ -12,6 +12,30 @@
 
 #include "fdf.h"
 
+static void	ft_fdf_height(t_fdf *fdf, int height)
+{
+	int	i;
+	int	j;
+
+	mlx_clear_window(fdf->mlx, fdf->win);
+	i = -1;
+	while (++i < fdf->rows)
+	{
+		j = -1;
+		while (++j < fdf->cols)
+		{
+			if (PT.s == 1)
+			{
+				if (height == UP)
+					PT.z += 5;
+				else if (height == DOWN)
+					PT.z -= 5;
+			}
+		}
+	}
+	ft_print_points(fdf);
+}
+
 static void	ft_fdf_move(t_fdf *fdf, int move)
 {
 	mlx_clear_window(fdf->mlx, fdf->win);
@@ -38,5 +62,9 @@ int			ft_fdf_hooks(int key, t_fdf *fdf)
 		ft_fdf_move(fdf, UP);
 	else if (key == 125)
 		ft_fdf_move(fdf, DOWN);
+	else if (key == 13)
+		ft_fdf_height(fdf, UP);
+	else if (key == 1)
+		ft_fdf_height(fdf, DOWN);
 	return (0);
 }

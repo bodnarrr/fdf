@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-static t_fdf	*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst, int fd)
+t_fdf			*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst, int fd)
 {
 	t_flst		*fordel;
 
@@ -31,7 +31,7 @@ static t_fdf	*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst, int fd)
 	return (NULL);
 }
 
-static t_fdf	*ft_all_points(t_flst *lst, t_fdf *fdf)
+t_fdf			*ft_all_points(t_flst *lst, t_fdf *fdf)
 {
 	int			i;
 	t_flst		*wrk;
@@ -49,7 +49,7 @@ static t_fdf	*ft_all_points(t_flst *lst, t_fdf *fdf)
 	return (fdf);
 }
 
-static t_flst	*ft_add_fnode(t_fpts *pts, t_flst *lst)
+t_flst			*ft_add_fnode(t_fpts *pts, t_flst *lst)
 {
 	t_flst		*new;
 	t_flst		*wrk;
@@ -69,7 +69,7 @@ static t_flst	*ft_add_fnode(t_fpts *pts, t_flst *lst)
 	return (lst);
 }
 
-static t_fpts	*ft_make_arr(char **wrk, t_fparse p)
+t_fpts			*ft_make_arr(char **wrk, t_fparse p)
 {
 	t_fpts		*res;
 	int			i;
@@ -77,52 +77,13 @@ static t_fpts	*ft_make_arr(char **wrk, t_fparse p)
 	res = (t_fpts*)ft_memalloc(sizeof(t_fpts) * (p.dotpl));
 	i = -1;
 	while (++i < p.dotpl)
-		(res[i]).z = ft_atoi(wrk[i]);
-	i = -1;
-	return (res);
-}
-
-static int		ft_count_dotpl(char **get)
-{
-	int		res;
-	char	**wrk;
-
-	res = 0;
-	wrk = get;
-	while (*wrk)
 	{
-		res++;
-		wrk++;
+		(res[i]).z = ft_atoi(wrk[i]);
+		if ((res[i]).z > 0)
+			(res[i]).s = 1;
+		else
+			(res[i]).s = 0;
 	}
-	return (res);
-}
-
-t_fdf			*ft_empty_first_line(t_fdf *fdf, char **wrk, int fd)
-{
-	free(wrk[0]);
-	wrk[0] = NULL;
-	free(wrk);
-	wrk = NULL;
-	free(fdf);
-	fdf = NULL;
-	close(fd);
-	ft_printf("Empty map!\n");
-	return (fdf);
-}
-
-t_fdf			*ft_folder_err(t_fdf **fdf)
-{
-	free(*fdf);
-	*fdf = NULL;
-	return (*fdf);
-}
-
-char			**ft_get_clearsplit(char **str)
-{
-	char		**res;
-
-	res = ft_strsplit(*str, ' ');
-	ft_strdel(str);
 	return (res);
 }
 
@@ -130,7 +91,6 @@ t_fdf			*ft_fparse(int fd, t_fdf *fdf, int gnl, t_flst *lst)
 {
 	t_fparse	p;
 	char		**wrk;
-	t_fpts		*l_pts;
 
 	if (fd == -1 && ft_printf("Incorrect filename!\n"))
 		return (NULL);
@@ -146,15 +106,7 @@ t_fdf			*ft_fparse(int fd, t_fdf *fdf, int gnl, t_flst *lst)
 		}
 		if ((p.curr_dotpl = ft_count_dotpl(wrk)) != p.dotpl)
 			return (ft_parse_error(fdf, &(p.line), &lst, fd));
-
-		// lst = ft_make_lst(wrk, p, lst);
-
-		l_pts = ft_make_arr(wrk, p);
-		ft_clear_strarr(wrk, p.curr_dotpl);
-		lst = ft_add_fnode(l_pts, lst);
-		(fdf->rows)++;
-
-
+		lst = ft_make_lst(wrk, p, lst, fdf);
 	}
 	if (gnl == -1 && ft_printf("It's a folder!\n"))
 		return (ft_folder_err(&fdf));
