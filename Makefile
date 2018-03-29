@@ -15,7 +15,7 @@ NAME = fdf
 LIB = libftprintf.a
 
 SRCS =	main.c ft_fdf_parse.c ft_initial_coords.c ft_print_points.c \
-		ft_fdf_hooks.c ft_clear_strarr.c ft_fdf_parsing_add.c
+		ft_fdf_hooks.c ft_clear_strarr.c ft_fdf_parsing_add.c ft_bresenham.c
 		
 
 OBJECTS = $(SRCS:.c=.o)

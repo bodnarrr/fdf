@@ -47,15 +47,6 @@ t_fdf			*ft_folder_err(t_fdf **fdf)
 	return (*fdf);
 }
 
-char			**ft_get_clearsplit(char **str)
-{
-	char		**res;
-
-	res = ft_strsplit(*str, ' ');
-	ft_strdel(str);
-	return (res);
-}
-
 t_flst			*ft_make_lst(char **wrk, t_fparse p, t_flst *lst, t_fdf *fdf)
 {
 	t_fpts		*l_pts;

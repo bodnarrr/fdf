@@ -36,14 +36,17 @@ t_fdf			*ft_all_points(t_flst *lst, t_fdf *fdf)
 	int			i;
 	t_flst		*wrk;
 	t_fpts		**res;
+	t_flst		*fordel;
 
 	res = (t_fpts**)malloc(sizeof(t_fpts*) * fdf->rows);
 	i = -1;
 	wrk = lst;
 	while (++i < fdf->rows)
 	{
+		fordel = wrk;
 		res[i] = wrk->l_pts;
 		wrk = wrk->next;
+		free(fordel);
 	}
 	fdf->points = res;
 	return (fdf);
@@ -79,7 +82,7 @@ t_fpts			*ft_make_arr(char **wrk, t_fparse p)
 	while (++i < p.dotpl)
 	{
 		(res[i]).z = ft_atoi(wrk[i]);
-		if ((res[i]).z > 0)
+		if ((res[i]).z != 0)
 			(res[i]).s = 1;
 		else
 			(res[i]).s = 0;
@@ -97,7 +100,8 @@ t_fdf			*ft_fparse(int fd, t_fdf *fdf, int gnl, t_flst *lst)
 	fdf = (t_fdf*)ft_memalloc(sizeof(t_fdf));
 	while ((gnl = get_next_line(fd, &(p.line))) == 1)
 	{
-		wrk = ft_get_clearsplit(&(p.line));
+		wrk = ft_strsplit(p.line, ' ');
+		ft_strdel(&(p.line));
 		if (fdf->rows == 0)
 		{
 			if ((p.dotpl = ft_count_dotpl(wrk)) == 0)

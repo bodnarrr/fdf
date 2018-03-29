@@ -33,20 +33,22 @@
 # define XD 3
 # define YU 4
 # define YD 5
-# define ABS(x) ((x < 0) ? (-1 * x) : x)
+# define ABS(x) (((x) < 0) ? (-1 * (x)) : (x))
 
-typedef struct			s_bres
+typedef struct		s_bres
 {
-	int		dx;
-	int		dy;
-	int		sx;
-	int		sy;
-	int		err;
-	int		e2;
-	int		x;
-	int		y;
-	int		col;
-}						t_bres;
+	int				x0;
+	int				y0;
+	int				x1;
+	int				y1;
+	int				dx;
+	int				sx;
+	int				dy;
+	int				sy;
+	int				err;
+	int				e2;
+
+}					t_bres;
 
 typedef struct		s_fpts
 {
@@ -85,15 +87,13 @@ typedef struct		s_fparse
 }					t_fparse;
 
 t_fdf				*ft_fparse(int fd, t_fdf *fdf, int gnl, t_flst *lst);
-void				ft_initial_coords(t_fpts **points, int rows, int cols,
-					t_fdf *fdf);
+int					ft_initial_coords(t_fpts **points, t_fdf *fdf);
 void				ft_print_points(t_fdf *fdf);
 int					ft_fdf_hooks(int key, t_fdf *fdf);
 void				ft_clear_strarr(char **str, int lines);
 int					ft_count_dotpl(char **get);
 t_fdf				*ft_empty_first_line(t_fdf *fdf, char **wrk, int fd);
 t_fdf				*ft_folder_err(t_fdf **fdf);
-char				**ft_get_clearsplit(char **str);
 t_flst				*ft_make_lst(char **wrk, t_fparse p, t_flst *lst,
 					t_fdf *fdf);
 t_fpts				*ft_make_arr(char **wrk, t_fparse p);
@@ -101,4 +101,8 @@ t_flst				*ft_add_fnode(t_fpts *pts, t_flst *lst);
 t_fdf				*ft_all_points(t_flst *lst, t_fdf *fdf);
 t_fdf				*ft_parse_error(t_fdf *fdf, char **line, t_flst **lst,
 					int fd);
+void				ft_initialize_bres(t_bres *wrk, t_fpts from, t_fpts to,
+					t_fdf *fdf);
+void				ft_bresenham(t_fpts from, t_fpts to, t_fdf *fdf);
+
 #endif

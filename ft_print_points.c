@@ -63,23 +63,6 @@ static void	ft_fdf_rot_x(t_fdf *fdf, float angle)
 	}
 }
 
-
-void	ft_bresenham (int x0, int y0, int x1, int y1, t_fdf *fdf)
-{
-  int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
-  int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
-  int err = dx + dy, e2; /* error value e_xy */
- 
-  for (;;){  /* loop */
-  	mlx_pixel_put(fdf->mlx, fdf->win, x0, y0, 0xFF00);
-    if (x0 == x1 && y0 == y1) break;
-    e2 = 2 * err;
-    if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
-    if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
-  }
-}
-
-
 static void	ft_project_points(t_fdf *fdf)
 {
 	ft_fdf_rot_x(fdf, -40 * DEG);
@@ -103,11 +86,13 @@ void		ft_print_points(t_fdf *fdf)
 		while (++j < fdf->cols)
 		{
 			if (j + 1 < fdf->cols)
-				ft_bresenham((fdf->points)[i][j].xn + fdf->dx, (fdf->points)[i][j].yn + fdf->dy,
-				(fdf->points)[i][j + 1].xn + fdf->dx, (fdf->points)[i][j + 1].yn + fdf->dy, fdf);
+				ft_bresenham((fdf->points)[i][j], (fdf->points)[i][j + 1], fdf);
 			if (i + 1 < fdf->rows)
-				ft_bresenham((fdf->points)[i][j].xn + fdf->dx, (fdf->points)[i][j].yn + fdf->dy,
-				(fdf->points)[i + 1][j].xn + fdf->dx, (fdf->points)[i + 1][j].yn + fdf->dy, fdf);
+				ft_bresenham((fdf->points)[i][j], (fdf->points)[i + 1][j], fdf);
 		}
 	}
+	mlx_string_put(fdf->mlx, fdf->win, 550, 20, 0xFF00, "Use arrows for moving \
+		the map\n and \"W\", \"S\" for manipulating height of points");
+	mlx_string_put(fdf->mlx, fdf->win, 800, 50, 0xFF00, "Space for initial \
+		position\n");
 }

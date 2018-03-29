@@ -12,6 +12,13 @@
 
 #include "fdf.h"
 
+int		exit_x(void *par)
+{
+	par = NULL;
+	exit(1);
+	return (0);
+}
+
 t_fdf	*ft_initialize_fdf(t_fdf *fdf)
 {
 	fdf->dx = WIN_W / 5;
@@ -38,10 +45,11 @@ int		main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	if ((fdf = ft_fparse(fd, fdf, 0, NULL)) == NULL)
 		return (1);
-	ft_initial_coords(fdf->points, fdf->rows, fdf->cols, fdf);
+	ft_initial_coords(fdf->points, fdf);
 	fdf = ft_initialize_fdf(fdf);
 	ft_print_points(fdf);
 	mlx_hook(fdf->win, 2, 5, ft_fdf_hooks, fdf);
+	mlx_hook(fdf->win, 17, 1L << 17, exit_x, fdf);
 	mlx_loop(fdf->mlx);
 	return (0);
 }
