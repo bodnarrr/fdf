@@ -112,7 +112,7 @@ t_fdf			*ft_fparse(int fd, t_fdf *fdf, int gnl, t_flst *lst)
 			return (ft_parse_error(fdf, &(p.line), &lst, fd));
 		lst = ft_make_lst(wrk, p, lst, fdf);
 	}
-	if (gnl == -1 && ft_printf("It's a folder!\n"))
+	if ((gnl == -1 && ERRMAP) || (fdf->rows == 0 && gnl == 0 && ERRMAP))
 		return (ft_folder_err(&fdf));
 	if (p.line != NULL)
 		ft_strdel(&(p.line));

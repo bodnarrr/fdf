@@ -34,6 +34,7 @@
 # define YU 4
 # define YD 5
 # define ABS(x) (((x) < 0) ? (-1 * (x)) : (x))
+# define ERRMAP ft_printf("Incorrect map!\n")
 
 typedef struct		s_bres
 {
